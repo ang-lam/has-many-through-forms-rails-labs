@@ -1,1 +1,22 @@
+<%= form_for post do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+    <%= f.label :content %>
+    <%= f.text_field :content %>
+    
+    <h4>Select a Category</h4>
+    <!-- collection_check_boxes similar to collection_select -->
+    <!-- :keyofparamater, :collection we want shown as check boxes, :value submitted with params, :text value user sees in check boxes  -->
+    <%= f.collection_check_boxes :category_ids, Category.all, :id, :name %>
+    
+    <h4>or Create a Category:</h4>
+    <!-- since post has_many categories we use plural, if belongs to it would be singluar -->
+    <%= f.fields_for :categories, @post.categories.build do |c| %>
+        <%= c.label :name %>
+        <%= c.text_field :name %>
+    <% end %>
 
+
+    <%= f.submit %>
+
+<% end %>

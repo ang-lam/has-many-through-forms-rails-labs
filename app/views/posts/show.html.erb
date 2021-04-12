@@ -1,1 +1,38 @@
+<h1>Post Show Page</h1>
 
+Title: <%= @post.title %>
+Content: <%= @post.content %>
+
+
+Categories: 
+<% @post.categories.each do |category| %>
+   <p> <%= category.name %> </p>
+<% end %>
+
+Comments: 
+<% @post.comments.each do |comment| %>
+   <p> <%= comment.user.username %> says: <%= comment.content %> </p>
+<% end %>
+
+Users: 
+<% @post.users.uniq.each do |user| %>
+   <p> <%= link_to user.username, user_path(user) %> </p>
+<% end %>
+
+<%= form_for @comment do |f| %>
+    <!-- have hidden field because we're going into comment controller but we are in post -->
+    <%= f.hidden_field :post_id, value: @post.id %>
+    <%= f.label :content %>
+    <%= f.text_field :content %>
+
+    <h4>Select the User</h4>
+    <%= f.collection_select :user_id, User.all, :id, :username, include_blank: true %>
+
+    <h4>Enter Username</h4>
+    <%= f.fields_for :user, @user do |u| %>
+        <%= u.label :username %>
+        <%= u.text_field :username %>
+    <% end %>
+
+    <%= f.submit %>
+<% end %>
